@@ -38,7 +38,8 @@ resource "sdwan_system_aaa_feature" "system_aaa_feature" {
       address             = server.address
       auth_port           = try(server.authentication_port, null)
       auth_port_variable  = try("{{${server.authentication_port_variable}}}", null)
-      key                 = server.key
+      key                 = try(server.key, null)
+      key_variable        = try("{{${server.key_variable}}}", null)
       key_type            = try(server.key_type, null)
       key_type_variable   = try("{{${server.key_type_variable}}}", null)
       retransmit          = try(server.retransmit, null)
@@ -55,7 +56,8 @@ resource "sdwan_system_aaa_feature" "system_aaa_feature" {
     group_name = try("tacacs-${group.vpn}", "tacacs-0-0")
     servers = !can(group.servers) ? null : [for server in group.servers : {
       address          = server.address
-      key              = server.key
+      key              = try(server.key, null)
+      key_variable     = try("{{${server.key_variable}}}", null)
       port             = try(server.port, null)
       port_variable    = try("{{${server.port_variable}}}", null)
       timeout          = try(server.timeout, null)
